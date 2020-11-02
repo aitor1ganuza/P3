@@ -44,7 +44,8 @@ int main(int argc, const char *argv[]) {
         true,    // show help if requested
         "2.0");  // version string
 
-	std::string input_wav = args["<input-wav>"].asString();
+	//AÑADIREMOS LOS ARGS DEL DOCOPT
+  std::string input_wav = args["<input-wav>"].asString();
 	std::string output_txt = args["<output-txt>"].asString();
 
   // Read input sound file
