@@ -11,14 +11,15 @@ namespace upc
 {
   void PitchAnalyzer::autocorrelation(const vector<float> &x, vector<float> &r) const
   {
-    float sum = 0;
+
     for (unsigned int l = 0; l < r.size(); ++l)
     {
       /// \TODO Compute the autocorrelation r[l]
       /// \DONE
-      for (int i = 0; i <= frameLen - l - 1; i++)
+      float sum = 0;
+      for (unsigned int i = 0; i < frameLen - l; i++)
       {
-        sum = sum + x[i] * x[i + l];
+        sum += x[i] * x[i + l];
       }
       r[l] = sum / frameLen;
       sum = 0;
@@ -40,7 +41,7 @@ namespace upc
     case HAMMING:
       /// \TODO Implement the Hamming window
       /// \DONE
-      for (int i = 0; i < frameLen; i++)
+      for (unsigned int i = 0; i < frameLen; i++)
       {
         window[i] = 0.53836 - 0.46164 * cos(2 * M_PI * i / (frameLen - 1));
       }
@@ -69,6 +70,9 @@ namespace upc
     /// \TODO Implement a rule to decide whether the sound is voiced or not.
     /// * You can use the standard features (pot, r1norm, rmaxnorm),
     ///   or compute and use other ones.
+    if (pot > -60 && r1norm > TH_1 && rmaxnorm > TH_2) {
+      return false;
+    }
     return true;
   }
 
@@ -76,6 +80,7 @@ namespace upc
   {
     if (x.size() != frameLen)
       return -1.0F;
+
 
     //Window input frame
     for (unsigned int i = 0; i < x.size(); ++i)
@@ -87,14 +92,33 @@ namespace upc
     autocorrelation(x, r);
 
     vector<float>::const_iterator iR = r.begin(), iRMax = iR;
-
+    float max_value = 0;
     /// \TODO
     /// Find the lag of the maximum value of the autocorrelation away from the origin.<br>
     /// Choices to set the minimum value of the lag are:
-    ///    - The first negative value of the autocorrelation.
-    ///    - The lag corresponding to the maximum value of the pitch.
+    ///    - The first negative value of the autocorrelation. 
+    ///    - The lag corresponding to the maximum value of the pitch. (npitch_min condition)
     ///	   .
     /// In either case, the lag should not exceed that of the minimum value of the pitch.
+    /// \DONE
+
+    bool negative_found = false;
+    //setting the minimum value of the lag
+    while(!negative_found && iR - r.begin() < npitch_min) {
+      if (*iR < 0) {
+        negative_found = true;
+      }
+      iR++;
+    }
+     
+    //finding the maximum of the autocorrelation for npitch_min <= n <= npitch_max
+    while(iR - r.begin() <= npitch_max) {
+      if (*iR > max_value) {
+        iRMax = iR;
+        max_value = *iR;
+      }
+      iR++;
+    }
 
     unsigned int lag = iRMax - r.begin();
 

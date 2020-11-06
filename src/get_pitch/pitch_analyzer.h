@@ -9,6 +9,8 @@
 namespace upc {
   const float MIN_F0 = 20.0F;    ///< Minimum value of pitch in Hertzs
   const float MAX_F0 = 10000.0F; ///< Maximum value of pitch in Hertzs
+  const float TH_1 = 0.6;        ///< Threshold, if r[1]/r[0] < TH_1, then it is unvoiced
+  const float TH_2 = 0.4;        ///< Threshold, if r[lag]/r[0] < TH_2, then it is unvoiced
 
   ///
   /// PitchAnalyzer: class that computes the pitch (in Hz) from a signal frame.
