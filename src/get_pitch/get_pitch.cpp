@@ -27,6 +27,10 @@ Usage:
 Options:
     -h, --help  Show this screen
     --version   Show the version of the project
+    -1 FLOAT, --weight1=FLOAT  valor del peso weight1 [default: 0.92]
+    -2 FLOAT, --weight2=FLOAT  valor del peso weight2 [default: 0.77]
+    -3 FLOAT, --weight3=FLOAT  valor del peso weight3 [default: -40]
+    
 
 Arguments:
     input-wav   Wave file with the audio signal
@@ -44,8 +48,20 @@ int main(int argc, const char *argv[]) {
         true,    // show help if requested
         "2.0");  // version string
 
+//debug
+#if 0
+  std::cout << "DEBUG:" << "\n";
+  for (auto elem: args) {
+    std::cout << elem.first << " " << elem.second << "\n";
+  }
+  std::cout << "END DEBUG" << "\n";
+  std::cout << std::stof(args["--weight2"].asString()) << endl;
+  std::cout << "END DEBUG" << "\n";
+#endif
+
 	std::string input_wav = args["<input-wav>"].asString();
 	std::string output_txt = args["<output-txt>"].asString();
+
 
   // Read input sound file
   unsigned int rate;
@@ -59,7 +75,7 @@ int main(int argc, const char *argv[]) {
   int n_shift = rate * FRAME_SHIFT;
 
   // Define analyzer
-  PitchAnalyzer analyzer(n_len, rate, PitchAnalyzer::HAMMING, 50, 500);
+  PitchAnalyzer analyzer(n_len, rate, std::stof(args["--weight1"].asString()), std::stof(args["--weight2"].asString()), std::stof(args["--weight3"].asString()), PitchAnalyzer::HAMMING, 50, 500);
 
   /// \TODO
   /// Preprocess the input signal in order to ease pitch estimation. For instance,

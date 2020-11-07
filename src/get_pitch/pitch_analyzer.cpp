@@ -69,7 +69,8 @@ namespace upc
     /// \TODO Implement a rule to decide whether the sound is voiced or not.
     /// * You can use the standard features (pot, r1norm, rmaxnorm),
     ///   or compute and use other ones.
-    if (pot > -60 && r1norm > TH_1 && rmaxnorm > TH_2) {
+    
+    if ((r1norm > weight1 || rmaxnorm > weight2) && pot > weight3) {
       return false;
     }
     return true;
@@ -109,7 +110,7 @@ namespace upc
       }
       iR++;
     }
-     
+
     //finding the maximum of the autocorrelation for npitch_min <= n <= npitch_max
     while(iR - r.begin() <= npitch_max) {
       if (*iR > max_value) {
