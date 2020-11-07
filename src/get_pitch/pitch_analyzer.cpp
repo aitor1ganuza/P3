@@ -101,7 +101,7 @@ namespace upc
     ///	   .
     /// In either case, the lag should not exceed that of the minimum value of the pitch.
     /// \DONE
-
+    
     bool negative_found = false;
     //setting the minimum value of the lag
     while(!negative_found && iR - r.begin() < npitch_min) {
@@ -110,10 +110,10 @@ namespace upc
       }
       iR++;
     }
-     
+    // iR += npitch_min;
     //finding the maximum of the autocorrelation for npitch_min <= n <= npitch_max
     while(iR - r.begin() <= npitch_max) {
-      if (*iR > max_value) {
+      if (*iR >= max_value) {
         iRMax = iR;
         max_value = *iR;
       }
