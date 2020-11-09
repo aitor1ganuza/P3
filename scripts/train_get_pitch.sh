@@ -2,8 +2,8 @@
 
 # Put here the program (maybe with path)
 GETF0="get_pitch"
-: '
-for weight1 in 0.9 0.91 0.92 0.93 0.94 0.95; do
+
+for weight1 in 0.8 0.85 0.9 0.91 0.92 0.93 0.94 0.95; do
     echo "weight1 = $weight1"
     for fwav in pitch_db/train/*.wav; do
         ff0=${fwav/.wav/.f0}
@@ -11,7 +11,8 @@ for weight1 in 0.9 0.91 0.92 0.93 0.94 0.95; do
     done
     pitch_evaluate pitch_db/train/*f0ref | grep 'TOTAL'
 done
-'
+
+: '
 for weight2 in 0.7 0.73 0.75 0.77 0.8; do
     echo "weight2 = $weight2"
     for fwav in pitch_db/train/*.wav; do
@@ -20,4 +21,5 @@ for weight2 in 0.7 0.73 0.75 0.77 0.8; do
     done
     pitch_evaluate pitch_db/train/*f0ref | grep 'TOTAL'
 done
+'
 exit 0

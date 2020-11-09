@@ -4,10 +4,10 @@
 #include <fstream>
 #include <string.h>
 #include <errno.h>
-
+#include <algorithm>
 #include "wavfile_mono.h"
 #include "pitch_analyzer.h"
-
+#include "math.h"
 #include "docopt.h"
 
 #define FRAME_LEN   0.030 /* 30 ms. */
@@ -29,7 +29,7 @@ Options:
     --version   Show the version of the project
     -1 FLOAT, --weight1=FLOAT  valor del peso weight1 [default: 0.92]
     -2 FLOAT, --weight2=FLOAT  valor del peso weight2 [default: 0.77]
-    -3 FLOAT, --weight3=FLOAT  valor del peso weight3 [default: -40]
+    -3 FLOAT, --weight3=FLOAT  valor del peso weight3 [default: -60]
     
 
 Arguments:
@@ -48,7 +48,7 @@ int main(int argc, const char *argv[]) {
         true,    // show help if requested
         "2.0");  // version string
 
-//debug
+//debug, showing the elements of the map
 #if 0
   std::cout << "DEBUG:" << "\n";
   for (auto elem: args) {
@@ -80,9 +80,24 @@ int main(int argc, const char *argv[]) {
   /// \TODO
   /// Preprocess the input signal in order to ease pitch estimation. For instance,
   /// central-clipping or low pass filtering may be used.
-  
-  // Iterate for each frame and save values in f0 vector
+  /// \DONE
+  // Hacemos center-clipping
   vector<float>::iterator iX;
+  #if 1
+  float umbral = 0.005;
+  for(iX = x.begin(); iX < x.end(); iX++) {
+    if(*iX <= umbral && *iX >= -umbral) {
+       *iX = 0;
+    }/*
+    else if(*iX > umbral) {
+      *iX -= umbral;
+    }
+    else if(*iX < -umbral) {
+      *iX += umbral;
+    }*/
+  }
+  #endif
+  // Iterate for each frame and save values in f0 vector
   vector<float> f0;
   for (iX = x.begin(); iX + n_len < x.end(); iX = iX + n_shift) {
     float f = analyzer(iX, iX + n_len);
@@ -92,6 +107,29 @@ int main(int argc, const char *argv[]) {
   /// \TODO
   /// Postprocess the estimation in order to supress errors. For instance, a median filter
   /// or time-warping may be used.
+  //Utilizamos el median filter
+  #if 0
+  int longitud = static_cast<int>(f0.size());
+  vector<float> ventana;
+  cout << longitud << " " << '\n';
+  for(int i = 0; i < longitud; i++) {
+    //if(f0[i] != 0) {
+      //Añadimos elementos a la ventana
+      for(int j=0; j<5; j++) {
+        ventana.insert(ventana.begin() + j, f0[i+j]);
+        //if(ventana.)
+      }
+      //Poner aqui condición para si hay más de la mitad de 0
+      //Ordenamos elementos
+      sort(ventana.begin(),ventana.end());
+      //Cogemos la mediana de la ventana
+      
+      f0[i] = ventana[2];
+      ventana.clear();
+    //}
+  }
+  #endif
+
 
   // Write f0 contour into the output file
   ofstream os(output_txt);
