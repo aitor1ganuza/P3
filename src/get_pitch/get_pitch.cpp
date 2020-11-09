@@ -108,25 +108,43 @@ int main(int argc, const char *argv[]) {
   /// Postprocess the estimation in order to supress errors. For instance, a median filter
   /// or time-warping may be used.
   //Utilizamos el median filter
-  #if 0
+  #if 1
   int longitud = static_cast<int>(f0.size());
-  vector<float> ventana;
-  cout << longitud << " " << '\n';
+  vector<float> ventana; 
   for(int i = 0; i < longitud; i++) {
-    //if(f0[i] != 0) {
-      //Añadimos elementos a la ventana
-      for(int j=0; j<5; j++) {
-        ventana.insert(ventana.begin() + j, f0[i+j]);
-        //if(ventana.)
+    //caso de cuando es trama sonora
+    if(f0[i] != 0 && f0[i+1] != 0) {
+      //Para los errores de frecuencia múltiple o mitad
+      if(f0[i] >= 2*f0[i+1] || 2*f0[i] <= f0[i+1]) {
+        //Añadimos elementos a la ventana
+        for(int j=0; j<3; j++) {
+          ventana.insert(ventana.begin() + j, f0[i+j]);
+        }
+        //Ordenamos elementos
+        sort(ventana.begin(),ventana.end());
+        //Cogemos la mediana de la ventana y le asignamos ese valor a la frecuencia multiple o mitad
+        f0[i] = ventana[1];
+        ventana.clear();
       }
-      //Poner aqui condición para si hay más de la mitad de 0
-      //Ordenamos elementos
-      sort(ventana.begin(),ventana.end());
-      //Cogemos la mediana de la ventana
-      
-      f0[i] = ventana[2];
-      ventana.clear();
-    //}
+    }
+    
+    else if(f0[i] != 0 && f0[i+1] == 0) {
+      //caso confusión detecta sonoro y es sordo
+      if(f0[i-1] == 0) {
+        f0[i] = 0;
+      }
+      //caso especifico frecuencia doble o mitad justo cuando pasa de sonoro a sordo
+      else {
+        if(f0[i] >= 2*f0[i-1] || 2*f0[i] <= f0[i-1]) {
+          f0[i] = f0[i-1];
+        } 
+      }
+    }
+    //caso confusion detecta sordo y es sonoro
+    else if(f0[i] == 0 && f0[i+1] != 0 && f0[i-1] != 0 ) {
+      f0[i] = (f0[i+1] + f0[i-1])/2;
+    }
+
   }
   #endif
 
