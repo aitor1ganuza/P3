@@ -114,13 +114,18 @@ Ejercicios básicos
 		en esta práctica es de 15 ms.
 
     <img src="Comparacion_pitch_parametros.PNG" width="750" align="center">
-    De arriba a abajo tenemos: Pitch(Hz), Potencia (dB), r[1]/r[0], r[lag]/(r[0]).
+    
+      De arriba a abajo tenemos: Pitch(Hz), Potencia (dB), r[1]/r[0], r[lag]/(r[0]).
 
 
       - Use el detector de pitch implementado en el programa `wavesurfer` en una señal de prueba y compare
 	    su resultado con el obtenido por la mejor versión de su propio sistema.  Inserte una gráfica
 		ilustrativa del resultado de ambos detectores.
+    
     <img src="PitchWavesurfer_vs_Pitch.PNG" width="750" align="center">
+
+    De arriba a abajo tenemos: Pitch_Wavesurfer(Hz), Pitch_Sistema(Hz), Señal WAV.
+
   
   * Optimice los parámetros de su sistema de detección de pitch e inserte una tabla con las tasas de error
     y el *score* TOTAL proporcionados por `pitch_evaluate` en la evaluación de la base de datos 
