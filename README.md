@@ -14,6 +14,28 @@ Ejercicios básicos
   `get_pitch`.
 
    * Complete el cálculo de la autocorrelación e inserte a continuación el código correspondiente.
+   
+   ```cpp
+   void PitchAnalyzer::autocorrelation(const vector<float> &x, vector<float> &r) const
+   {
+
+    for (unsigned int l = 0; l < r.size(); ++l)
+    {
+      /// \TODO Compute the autocorrelation r[l]
+      /// \DONE
+      float sum = 0;
+      for (unsigned int i = 0; i < frameLen - l; i++)
+      {
+        sum += x[i] * x[i + l];
+      }
+      r[l] = sum / frameLen;
+      sum = 0;
+    }
+
+    if (r[0] == 0.0F) //to avoid log() and divide zero
+      r[0] = 1e-10;
+   }
+   ```
 
    * Inserte una gŕafica donde, en un *subplot*, se vea con claridad la señal temporal de un segmento de
      unos 30 ms de un fonema sonoro y su periodo de pitch; y, en otro *subplot*, se vea con claridad la
@@ -44,6 +66,9 @@ Ejercicios básicos
 
 	    Recuerde configurar los paneles de datos para que el desplazamiento de ventana sea el adecuado, que
 		en esta práctica es de 15 ms.
+
+    <img src="Comparacion_pitch_parametros.PNG" width="640" align="center">
+
 
       - Use el detector de pitch implementado en el programa `wavesurfer` en una señal de prueba y compare
 	    su resultado con el obtenido por la mejor versión de su propio sistema.  Inserte una gráfica

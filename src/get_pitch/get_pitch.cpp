@@ -108,6 +108,7 @@ int main(int argc, const char *argv[]) {
   /// Postprocess the estimation in order to supress errors. For instance, a median filter
   /// or time-warping may be used.
   //Utilizamos el median filter
+  /// \DONE
   #if 1
   int longitud = static_cast<int>(f0.size());
   vector<float> ventana; 
