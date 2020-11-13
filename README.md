@@ -44,12 +44,58 @@ Ejercicios básicos
 	 NOTA: es más que probable que tenga que usar Python, Octave/MATLAB u otro programa semejante para
 	 hacerlo. Se valorará la utilización de la librería matplotlib de Python.
 
-   <img src="Autocorrelacion.PNG" width="640" align="center">
+   <img src="Autocorrelacion.png" width="800" align="center">
 
    * Determine el mejor candidato para el periodo de pitch localizando el primer máximo secundario de la
      autocorrelación. Inserte a continuación el código correspondiente.
+      vector<float>::const_iterator iR = r.begin(), iRMax = iR;
+    
+    ```cpp
+    float max_value = 0;
+    /// \TODO
+    /// Find the lag of the maximum value of the autocorrelation away from the origin.<br>
+    /// Choices to set the minimum value of the lag are:
+    ///    - The first negative value of the autocorrelation. 
+    ///    - The lag corresponding to the maximum value of the pitch. (npitch_min condition)
+    ///	   .
+    /// In either case, the lag should not exceed that of the minimum value of the pitch.
+    /// \DONE
+    
+    bool negative_found = false;
+    //setting the minimum value of the lag
+    while(!negative_found && iR - r.begin() < npitch_min) {
+      if (*iR < 0) {
+        negative_found = true;
+      }
+      iR++;
+    }
+    //finding the maximum of the autocorrelation for npitch_min <= n <= npitch_max
+    while(iR - r.begin() <= npitch_max) {
+      if (*iR >= max_value) {
+        iRMax = iR;
+        max_value = *iR;
+      }
+      iR++;
+    }
+
+    unsigned int lag = iRMax - r.begin();
+    ```
 
    * Implemente la regla de decisión sonoro o sordo e inserte el código correspondiente.
+
+   ```cpp
+    bool PitchAnalyzer::unvoiced(float pot, float r1norm, float rmaxnorm) const
+   {
+    /// \TODO Implement a rule to decide whether the sound is voiced or not.
+    /// * You can use the standard features (pot, r1norm, rmaxnorm),
+    ///   or compute and use other ones.
+    
+    if ((r1norm > weight1 || rmaxnorm > weight2) && pot > weight3) {
+      return false;
+    }
+    return true;
+   }
+   ```
 
 - Una vez completados los puntos anteriores, dispondrá de una primera versión del detector de pitch. El 
   resto del trabajo consiste, básicamente, en obtener las mejores prestaciones posibles con él.
