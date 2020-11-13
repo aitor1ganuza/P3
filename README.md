@@ -44,7 +44,7 @@ Ejercicios básicos
 	 NOTA: es más que probable que tenga que usar Python, Octave/MATLAB u otro programa semejante para
 	 hacerlo. Se valorará la utilización de la librería matplotlib de Python.
 
-   <img src="Autocorrelacion.png" width="800" align="center">
+   <img src="Autocorrelacion.png" width="640" align="center">
 
    * Determine el mejor candidato para el periodo de pitch localizando el primer máximo secundario de la
      autocorrelación. Inserte a continuación el código correspondiente.
@@ -113,12 +113,14 @@ Ejercicios básicos
 	    Recuerde configurar los paneles de datos para que el desplazamiento de ventana sea el adecuado, que
 		en esta práctica es de 15 ms.
 
-    <img src="Comparacion_pitch_parametros.PNG" width="640" align="center">
+    <img src="Comparacion_pitch_parametros.PNG" width="750" align="center">
+    De arriba a abajo tenemos: Pitch(Hz), Potencia (dB), r[1]/r[0], r[lag]/(r[0]).
 
 
       - Use el detector de pitch implementado en el programa `wavesurfer` en una señal de prueba y compare
 	    su resultado con el obtenido por la mejor versión de su propio sistema.  Inserte una gráfica
 		ilustrativa del resultado de ambos detectores.
+    <img src="PitchWavesurfer_vs_Pitch.PNG" width="750" align="center">
   
   * Optimice los parámetros de su sistema de detección de pitch e inserte una tabla con las tasas de error
     y el *score* TOTAL proporcionados por `pitch_evaluate` en la evaluación de la base de datos 
