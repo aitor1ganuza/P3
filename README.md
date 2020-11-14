@@ -242,13 +242,11 @@ Ejercicios de ampliación
   }
   #endif
   ```
-  El tamaño de la ventana que creamos debe ser el mínimo para permitir arreglar los errores de frecuencia múltiple o mitad ya que si no puede ser perjudicial y cambiar frecuencias fundamentales que ya estaban bien. Por eso mismo hemos escogido la ventana de tamaño 3 para que hayan dos valores correctos y uno incorrecto y mediante ordenación se pueda coger la mediana de esa ventana y asignarla al valor incorrecto. A continuación vamos a ver algunos errores a en una señal sin median filter y como se solucionan al aplicarlo.
+  El tamaño de la ventana que creamos debe ser el mínimo para permitir arreglar los errores de frecuencia múltiple o mitad ya que si no puede ser perjudicial y cambiar frecuencias fundamentales que ya estaban bien. Por eso mismo hemos escogido la ventana de tamaño 3 para que hayan dos valores correctos y uno incorrecto y mediante ordenación se pueda coger la mediana de esa ventana y asignarla al valor incorrecto. A continuación vamos a ver un par de errores en una señal sin median filter y como se solucionan al aplicarlo.
 
-  <img src="Error1.PNG" width="100" align="center"> <img src="Solucion1.PNG" width="100" align="right">
+  <img src="Error1.PNG" width="100" align="right"> <img src="Solucion1.PNG" width="100" align="right">
 
-  <img src="Error2.PNG" width="100" align="center"> <img src="Solucion2.PNG" width="100" align="right">
-
-
+  <img src="Error2.PNG" width="100" align="right"> <img src="Solucion2.PNG" width="100" align="right">
 
 
 
@@ -256,14 +254,16 @@ Ejercicios de ampliación
 
 
 
-
-
-   
 
 
 
 
    
+
+
+
+
+
 
 Evaluación *ciega* del detector
 -------------------------------
