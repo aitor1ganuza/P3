@@ -165,13 +165,99 @@ Ejercicios de ampliación
   Encontrará más información acerca de estas técnicas en las [Transparencias del Curso](https://atenea.upc.edu/pluginfile.php/2908770/mod_resource/content/3/2b_PS%20Techniques.pdf)
   y en [Spoken Language Processing](https://discovery.upc.edu/iii/encore/record/C__Rb1233593?lang=cat).
   También encontrará más información en los anexos del enunciado de esta práctica.
-
+  
   Incluya, a continuación, una explicación de las técnicas incorporadas al detector. Se valorará la
   inclusión de gráficas, tablas, código o cualquier otra cosa que ayude a comprender el trabajo realizado.
 
   También se valorará la realización de un estudio de los parámetros involucrados. Por ejemplo, si se opta
   por implementar el filtro de mediana, se valorará el análisis de los resultados obtenidos en función de
   la longitud del filtro.
+
+  Hemos utilizado tanto la técnica de preprocesado del *center clipping* como la de posprocesado del filtro de mediana.
+
+  El código del center clipping es el siguiente:
+
+  ```cpp
+  /// \TODO
+  /// Preprocess the input signal in order to ease pitch estimation. For instance,
+  /// central-clipping or low pass filtering may be used.
+  /// \DONE
+  // Hacemos center-clipping
+  vector<float>::iterator iX;
+  #if 1
+  float umbral = 0.005;
+  for(iX = x.begin(); iX < x.end(); iX++) {
+    if(*iX <= umbral && *iX >= -umbral) {
+       *iX = 0;
+    }
+  }
+  #endif
+  ```
+  El umbral lo hemos escogido de forma que las tramas sonoras no pierdan la periodicidad.
+
+  El código de filtro de mediana es el siguente:
+
+  ```cpp
+   /// \TODO
+  /// Postprocess the estimation in order to supress errors. For instance, a median filter
+  /// or time-warping may be used.
+  //Utilizamos el median filter
+  /// \DONE
+  #if 1
+  int longitud = static_cast<int>(f0.size());
+  vector<float> ventana; 
+  for(int i = 0; i < longitud; i++) {
+    //caso de cuando es trama sonora
+    if(f0[i] != 0 && f0[i+1] != 0) {
+      //Para los errores de frecuencia múltiple o mitad
+      if(f0[i] >= 2*f0[i+1] || 2*f0[i] <= f0[i+1]) {
+        //Añadimos elementos a la ventana
+        for(int j=0; j<3; j++) {
+          ventana.insert(ventana.begin() + j, f0[i+j]);
+        }
+        //Ordenamos elementos
+        sort(ventana.begin(),ventana.end());
+        //Cogemos la mediana de la ventana y le asignamos ese valor a la frecuencia multiple o mitad
+        f0[i] = ventana[1];
+        ventana.clear();
+      }
+    }
+    else if(f0[i] != 0 && f0[i+1] == 0) {
+      //caso confusión detecta sonoro y es sordo
+      if(f0[i-1] == 0) {
+        f0[i] = 0;
+      }
+      //caso especifico frecuencia doble o mitad justo cuando pasa de sonoro a sordo
+      else {
+        if(f0[i] >= 2*f0[i-1] || 2*f0[i] <= f0[i-1]) {
+          f0[i] = f0[i-1];
+        } 
+      }
+    }
+    //caso confusion detecta sordo y es sonoro
+    else if(f0[i] == 0 && f0[i+1] != 0 && f0[i-1] != 0 ) {
+      f0[i] = (f0[i+1] + f0[i-1])/2;
+    }
+
+  }
+  #endif
+  ```
+  El tamaño de la ventana que creamos debe ser el mínimo para permitir arreglar los errores de frecuencia múltiple o mitad ya que si no puede ser perjudicial y cambiar frecuencias fundamentales que ya estaban bien. Por eso mismo hemos escogido la ventana de tamaño 3 para que hayan dos valores correctos y uno incorrecto y mediante ordenación se pueda coger la mediana de esa ventana y asignarla al valor incorrecto. A continuación vamos a ver algunos errores a en una señal sin median filter y como se solucionan al aplicarlo.
+
+  <img src="Error1.PNG" width="500" align="left"> <img src="Solucion1.PNG" width="500" align="right">
+
+  <img src="Error2.PNG" width="500" align="left"> <img src="Solucion2.PNG" width="500" align="right">
+
+
+
+
+
+
+
+
+
+
+
    
 
 Evaluación *ciega* del detector

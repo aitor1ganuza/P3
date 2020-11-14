@@ -88,13 +88,7 @@ int main(int argc, const char *argv[]) {
   for(iX = x.begin(); iX < x.end(); iX++) {
     if(*iX <= umbral && *iX >= -umbral) {
        *iX = 0;
-    }/*
-    else if(*iX > umbral) {
-      *iX -= umbral;
     }
-    else if(*iX < -umbral) {
-      *iX += umbral;
-    }*/
   }
   #endif
   // Iterate for each frame and save values in f0 vector
@@ -128,7 +122,6 @@ int main(int argc, const char *argv[]) {
         ventana.clear();
       }
     }
-    
     else if(f0[i] != 0 && f0[i+1] == 0) {
       //caso confusión detecta sonoro y es sordo
       if(f0[i-1] == 0) {
