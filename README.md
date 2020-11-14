@@ -115,7 +115,7 @@ Ejercicios básicos
 
     <img src="Comparacion_pitch_parametros.PNG" width="750" align="center">
     
-      De arriba a abajo tenemos: Pitch(Hz), Potencia (dB), r[1]/r[0], r[lag]/(r[0]).
+      De arriba a abajo tenemos: Pitch(Hz), Potencia (dB), r[1]/r[0], r[lag]/r[0].
 
 
       - Use el detector de pitch implementado en el programa `wavesurfer` en una señal de prueba y compare

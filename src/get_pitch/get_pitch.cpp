@@ -29,7 +29,7 @@ Options:
     --version   Show the version of the project
     -1 FLOAT, --weight1=FLOAT  valor del peso weight1 [default: 0.92]
     -2 FLOAT, --weight2=FLOAT  valor del peso weight2 [default: 0.77]
-    -3 FLOAT, --weight3=FLOAT  valor del peso weight3 [default: -60]
+    -3 FLOAT, --weight3=FLOAT  valor del peso weight3 [default: -48]
     
 
 Arguments:
