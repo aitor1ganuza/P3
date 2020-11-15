@@ -99,6 +99,7 @@ Ejercicios básicos
   }
    ```
 En el siguiente diagrama se muestra la regla de decisión escogida. Además de la mostrada en el dibujo, para decidir sonoridad se tiene que cumplir que la potencia sea mayor al umbral weight3. 
+
 <img src="unvoiced_dibujo.jfif" width="350" align="center">
 
 - Una vez completados los puntos anteriores, dispondrá de una primera versión del detector de pitch. El 
@@ -134,6 +135,13 @@ En el siguiente diagrama se muestra la regla de decisión escogida. Además de l
   * Optimice los parámetros de su sistema de detección de pitch e inserte una tabla con las tasas de error
     y el *score* TOTAL proporcionados por `pitch_evaluate` en la evaluación de la base de datos 
 	`pitch_db/train`..
+	
+| -- | -- |
+| Unvoiced frames as voiced |      275/7045 (3.90 %)
+|Voiced frames as unvoiced  |    364/4155 (8.76 %)
+|Gross voiced errors (+20.00 %) |109/3791 (2.88 %)
+|MSE of fine errors  |   2.28 %
+|===>    TOTAL  | 91.17 %
 
    * Inserte una gráfica en la que se vea con claridad el resultado de su detector de pitch junto al del
      detector de Wavesurfer. Aunque puede usarse Wavesurfer para obtener la representación, se valorará
