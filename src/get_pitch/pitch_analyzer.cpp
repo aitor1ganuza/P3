@@ -11,7 +11,6 @@ namespace upc
 {
   void PitchAnalyzer::autocorrelation(const vector<float> &x, vector<float> &r) const
   {
-
     for (unsigned int l = 0; l < r.size(); ++l)
     {
       /// \TODO Compute the autocorrelation r[l]
@@ -22,7 +21,6 @@ namespace upc
         sum += x[i] * x[i + l];
       }
       r[l] = sum / frameLen;
-      sum = 0;
     }
 
     if (r[0] == 0.0F) //to avoid log() and divide zero
@@ -70,8 +68,11 @@ namespace upc
     /// \TODO Implement a rule to decide whether the sound is voiced or not.
     /// * You can use the standard features (pot, r1norm, rmaxnorm),
     ///   or compute and use other ones.
-    
-    if ((r1norm > weight1 || rmaxnorm > weight2) && pot > weight3) {
+    /// \DONE
+    //borrar
+
+    if ((r1norm > weight1 || rmaxnorm > weight2) && pot > weight3 && r1norm > weight4 && rmaxnorm > weight5)
+    {
       return false;
     }
     return true;
@@ -81,7 +82,6 @@ namespace upc
   {
     if (x.size() != frameLen)
       return -1.0F;
-
 
     //Window input frame
     for (unsigned int i = 0; i < x.size(); ++i)
@@ -97,23 +97,27 @@ namespace upc
     /// \TODO
     /// Find the lag of the maximum value of the autocorrelation away from the origin.<br>
     /// Choices to set the minimum value of the lag are:
-    ///    - The first negative value of the autocorrelation. 
+    ///    - The first negative value of the autocorrelation.
     ///    - The lag corresponding to the maximum value of the pitch. (npitch_min condition)
     ///	   .
     /// In either case, the lag should not exceed that of the minimum value of the pitch.
     /// \DONE
-    
+
     bool negative_found = false;
     //setting the minimum value of the lag
-    while(!negative_found && iR - r.begin() < npitch_min) {
-      if (*iR < 0) {
+    while (!negative_found && iR - r.begin() < npitch_min)
+    {
+      if (*iR < 0)
+      {
         negative_found = true;
       }
       iR++;
     }
     //finding the maximum of the autocorrelation for npitch_min <= n <= npitch_max
-    while(iR - r.begin() <= npitch_max) {
-      if (*iR >= max_value) {
+    while (iR - r.begin() <= npitch_max)
+    {
+      if (*iR >= max_value)
+      {
         iRMax = iR;
         max_value = *iR;
       }
