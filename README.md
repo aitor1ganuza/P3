@@ -162,6 +162,8 @@ Ejercicios de ampliación
 
   * Inserte un *pantallazo* en el que se vea el mensaje de ayuda del programa y un ejemplo de utilización
     con los argumentos añadidos.
+    
+     <img src="get_pitch_help.PNG" width="500" align="center">
 
 - Implemente las técnicas que considere oportunas para optimizar las prestaciones del sistema de detección
   de pitch.
@@ -212,49 +214,58 @@ Ejercicios de ampliación
   El código de filtro de mediana es el siguente:
 
   ```cpp
-   /// \TODO
-  /// Postprocess the estimation in order to supress errors. For instance, a median filter
-  /// or time-warping may be used.
-  //Utilizamos el median filter
-  /// \DONE
-  #if 1
+/// \TODO
+/// Postprocess the estimation in order to supress errors. For instance, a median filter
+/// or time-warping may be used.
+/// Utilizamos el median filter
+/// \DONE
+#if 1
   int longitud = static_cast<int>(f0.size());
-  vector<float> ventana; 
-  for(int i = 0; i < longitud; i++) {
+  int lon_ventana = 3;
+  vector<float> ventana;
+  for (int i = 0; i < longitud; i++)
+  {
     //caso de cuando es trama sonora
-    if(f0[i] != 0 && f0[i+1] != 0) {
+    if (f0[i] != 0 && f0[i + 1] != 0)
+    {
       //Para los errores de frecuencia múltiple o mitad
-      if(f0[i] >= 2*f0[i+1] || 2*f0[i] <= f0[i+1]) {
+      if (f0[i] >= 2 * f0[i + 1] || 2 * f0[i] <= f0[i + 1])
+      {
         //Añadimos elementos a la ventana
-        for(int j=0; j<3; j++) {
-          ventana.insert(ventana.begin() + j, f0[i+j]);
+        for (int j = 0; j < lon_ventana; j++)
+        {
+          ventana.insert(ventana.begin() + j, f0[i + j]);
         }
         //Ordenamos elementos
-        sort(ventana.begin(),ventana.end());
+        sort(ventana.begin(), ventana.end());
         //Cogemos la mediana de la ventana y le asignamos ese valor a la frecuencia multiple o mitad
-        f0[i] = ventana[1];
+        f0[i] = ventana[(lon_ventana - 1) / 2];
         ventana.clear();
       }
     }
-    else if(f0[i] != 0 && f0[i+1] == 0) {
+    else if (f0[i] != 0 && f0[i + 1] == 0)
+    {
       //caso confusión detecta sonoro y es sordo
-      if(f0[i-1] == 0) {
+      if (f0[i - 1] == 0)
+      {
         f0[i] = 0;
       }
       //caso especifico frecuencia doble o mitad justo cuando pasa de sonoro a sordo
-      else {
-        if(f0[i] >= 2*f0[i-1] || 2*f0[i] <= f0[i-1]) {
-          f0[i] = f0[i-1];
-        } 
+      else
+      {
+        if (f0[i] >= 2 * f0[i - 1] || 2 * f0[i] <= f0[i - 1])
+        {
+          f0[i] = f0[i - 1];
+        }
       }
     }
     //caso confusion detecta sordo y es sonoro
-    else if(f0[i] == 0 && f0[i+1] != 0 && f0[i-1] != 0 ) {
-      f0[i] = (f0[i+1] + f0[i-1])/2;
+    else if (f0[i] == 0 && f0[i + 1] != 0 && f0[i - 1] != 0)
+    {
+      f0[i] = (f0[i + 1] + f0[i - 1]) / 2;
     }
-
   }
-  #endif
+#endif
   ```
   El tamaño de la ventana que creamos debe ser el mínimo para permitir arreglar los errores de frecuencia múltiple o mitad ya que si no puede ser perjudicial y cambiar frecuencias fundamentales que ya estaban bien. Por eso mismo hemos escogido la ventana de tamaño 3 para que hayan dos valores correctos y uno incorrecto y mediante ordenación se pueda coger la mediana de esa ventana y asignarla al valor incorrecto. A continuación vamos a ver un par de errores en una señal sin median filter y como se solucionan al aplicarlo.
 
