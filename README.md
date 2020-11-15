@@ -144,10 +144,6 @@ En el siguiente diagrama se muestra la regla de decisión escogida. Además de l
 |MSE of fine errors  |   2.28 % |
 
 Para optimizar los parámetros de nuestro programa, hemos creado un script llamado `train_get_pitch.sh`, que sirve para cambiar fácilmente los valores de los umbrales.
-
-   * Inserte una gráfica en la que se vea con claridad el resultado de su detector de pitch junto al del
-     detector de Wavesurfer. Aunque puede usarse Wavesurfer para obtener la representación, se valorará
-	 el uso de alternativas de mayor calidad (particularmente Python).
    
 
 Ejercicios de ampliación
