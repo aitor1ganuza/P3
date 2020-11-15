@@ -85,17 +85,21 @@ Ejercicios básicos
 
    ```cpp
     bool PitchAnalyzer::unvoiced(float pot, float r1norm, float rmaxnorm) const
-   {
+  {
     /// \TODO Implement a rule to decide whether the sound is voiced or not.
     /// * You can use the standard features (pot, r1norm, rmaxnorm),
     ///   or compute and use other ones.
-    
-    if ((r1norm > weight1 || rmaxnorm > weight2) && pot > weight3) {
+    /// \DONE
+
+    if ((r1norm > weight1 || rmaxnorm > weight2) && pot > weight3 && r1norm > weight4 && rmaxnorm > weight5)
+    {
       return false;
     }
     return true;
-   }
+  }
    ```
+En el siguiente diagrama se muestra la regla de decisión escogida. Además de la mostrada en el dibujo, para decidir sonoridad se tiene que cumplir que la potencia sea mayor al umbral weight3. 
+<img src="Comparacion_pitch_parametros.PNG" width="750" align="center">
 
 - Una vez completados los puntos anteriores, dispondrá de una primera versión del detector de pitch. El 
   resto del trabajo consiste, básicamente, en obtener las mejores prestaciones posibles con él.
