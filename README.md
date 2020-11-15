@@ -136,12 +136,13 @@ En el siguiente diagrama se muestra la regla de decisión escogida. Además de l
     y el *score* TOTAL proporcionados por `pitch_evaluate` en la evaluación de la base de datos 
 	`pitch_db/train`..
 	
+| TOTAL| 91.17 %|
 | -- | -- |
-| Unvoiced frames as voiced |      275/7045 (3.90 %)
-|Voiced frames as unvoiced  |    364/4155 (8.76 %)
-|Gross voiced errors (+20.00 %) |109/3791 (2.88 %)
-|MSE of fine errors  |   2.28 %
-|===>    TOTAL  | 91.17 %
+| Unvoiced frames as voiced |      275/7045 (3.90 %) |
+|Voiced frames as unvoiced  |    364/4155 (8.76 %) |
+|Gross voiced errors (+20.00 %) |109/3791 (2.88 %) |
+|MSE of fine errors  |   2.28 % |
+
 
    * Inserte una gráfica en la que se vea con claridad el resultado de su detector de pitch junto al del
      detector de Wavesurfer. Aunque puede usarse Wavesurfer para obtener la representación, se valorará
