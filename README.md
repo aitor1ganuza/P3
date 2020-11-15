@@ -99,7 +99,7 @@ Ejercicios básicos
   }
    ```
 En el siguiente diagrama se muestra la regla de decisión escogida. Además de la mostrada en el dibujo, para decidir sonoridad se tiene que cumplir que la potencia sea mayor al umbral weight3. 
-<img src="Comparacion_pitch_parametros.PNG" width="750" align="center">
+<img src="unvoiced_dibujo.jfif" width="750" align="center">
 
 - Una vez completados los puntos anteriores, dispondrá de una primera versión del detector de pitch. El 
   resto del trabajo consiste, básicamente, en obtener las mejores prestaciones posibles con él.
