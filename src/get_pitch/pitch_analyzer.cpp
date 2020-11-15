@@ -69,7 +69,6 @@ namespace upc
     /// * You can use the standard features (pot, r1norm, rmaxnorm),
     ///   or compute and use other ones.
     /// \DONE
-    //borrar
 
     if ((r1norm > weight1 || rmaxnorm > weight2) && pot > weight3 && r1norm > weight4 && rmaxnorm > weight5)
     {
