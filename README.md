@@ -143,6 +143,7 @@ En el siguiente diagrama se muestra la regla de decisión escogida. Además de l
 |Gross voiced errors (+20.00 %) |109/3791 (2.88 %) |
 |MSE of fine errors  |   2.28 % |
 
+Para optimizar los parámetros de nuestro programa, hemos creado un script llamado `train_get_pitch.sh`, que sirve para cambiar fácilmente los valores de los umbrales.
 
    * Inserte una gráfica en la que se vea con claridad el resultado de su detector de pitch junto al del
      detector de Wavesurfer. Aunque puede usarse Wavesurfer para obtener la representación, se valorará
