@@ -85,17 +85,22 @@ Ejercicios básicos
 
    ```cpp
     bool PitchAnalyzer::unvoiced(float pot, float r1norm, float rmaxnorm) const
-   {
+  {
     /// \TODO Implement a rule to decide whether the sound is voiced or not.
     /// * You can use the standard features (pot, r1norm, rmaxnorm),
     ///   or compute and use other ones.
-    
-    if ((r1norm > weight1 || rmaxnorm > weight2) && pot > weight3) {
+    /// \DONE
+
+    if ((r1norm > weight1 || rmaxnorm > weight2) && pot > weight3 && r1norm > weight4 && rmaxnorm > weight5)
+    {
       return false;
     }
     return true;
-   }
+  }
    ```
+En el siguiente diagrama se muestra la regla de decisión escogida. Además de la mostrada en el dibujo, para decidir sonoridad se tiene que cumplir que la potencia sea mayor al umbral weight3. 
+
+<img src="unvoiced_dibujo.jfif" width="350" align="center">
 
 - Una vez completados los puntos anteriores, dispondrá de una primera versión del detector de pitch. El 
   resto del trabajo consiste, básicamente, en obtener las mejores prestaciones posibles con él.
@@ -130,10 +135,15 @@ Ejercicios básicos
   * Optimice los parámetros de su sistema de detección de pitch e inserte una tabla con las tasas de error
     y el *score* TOTAL proporcionados por `pitch_evaluate` en la evaluación de la base de datos 
 	`pitch_db/train`..
+	
+| TOTAL| 91.17 %|
+| -- | -- |
+| Unvoiced frames as voiced |      275/7045 (3.90 %) |
+|Voiced frames as unvoiced  |    364/4155 (8.76 %) |
+|Gross voiced errors (+20.00 %) |109/3791 (2.88 %) |
+|MSE of fine errors  |   2.28 % |
 
-   * Inserte una gráfica en la que se vea con claridad el resultado de su detector de pitch junto al del
-     detector de Wavesurfer. Aunque puede usarse Wavesurfer para obtener la representación, se valorará
-	 el uso de alternativas de mayor calidad (particularmente Python).
+Para optimizar los parámetros de nuestro programa, hemos creado un script llamado `train_get_pitch.sh`, que sirve para cambiar fácilmente los valores de los umbrales.
    
 
 Ejercicios de ampliación
@@ -148,6 +158,8 @@ Ejercicios de ampliación
 
   * Inserte un *pantallazo* en el que se vea el mensaje de ayuda del programa y un ejemplo de utilización
     con los argumentos añadidos.
+    
+     <img src="get_pitch_help.PNG" width="500" align="center">
 
 - Implemente las técnicas que considere oportunas para optimizar las prestaciones del sistema de detección
   de pitch.
@@ -198,49 +210,58 @@ Ejercicios de ampliación
   El código de filtro de mediana es el siguente:
 
   ```cpp
-   /// \TODO
-  /// Postprocess the estimation in order to supress errors. For instance, a median filter
-  /// or time-warping may be used.
-  //Utilizamos el median filter
-  /// \DONE
-  #if 1
-  int longitud = static_cast<int>(f0.size());
-  vector<float> ventana; 
-  for(int i = 0; i < longitud; i++) {
-    //caso de cuando es trama sonora
-    if(f0[i] != 0 && f0[i+1] != 0) {
-      //Para los errores de frecuencia múltiple o mitad
-      if(f0[i] >= 2*f0[i+1] || 2*f0[i] <= f0[i+1]) {
-        //Añadimos elementos a la ventana
-        for(int j=0; j<3; j++) {
-          ventana.insert(ventana.begin() + j, f0[i+j]);
-        }
-        //Ordenamos elementos
-        sort(ventana.begin(),ventana.end());
-        //Cogemos la mediana de la ventana y le asignamos ese valor a la frecuencia multiple o mitad
-        f0[i] = ventana[1];
-        ventana.clear();
-      }
-    }
-    else if(f0[i] != 0 && f0[i+1] == 0) {
-      //caso confusión detecta sonoro y es sordo
-      if(f0[i-1] == 0) {
-        f0[i] = 0;
-      }
-      //caso especifico frecuencia doble o mitad justo cuando pasa de sonoro a sordo
-      else {
-        if(f0[i] >= 2*f0[i-1] || 2*f0[i] <= f0[i-1]) {
-          f0[i] = f0[i-1];
-        } 
-      }
-    }
-    //caso confusion detecta sordo y es sonoro
-    else if(f0[i] == 0 && f0[i+1] != 0 && f0[i-1] != 0 ) {
-      f0[i] = (f0[i+1] + f0[i-1])/2;
-    }
-
-  }
-  #endif
+	/// \TODO
+	/// Postprocess the estimation in order to supress errors. For instance, a median filter
+	/// or time-warping may be used.
+	/// Utilizamos el median filter
+	/// \DONE
+	#if 1
+	  int longitud = static_cast<int>(f0.size());
+	  int lon_ventana = 3;
+	  vector<float> ventana;
+	  for (int i = 0; i < longitud; i++)
+	  {
+	    //caso de cuando es trama sonora
+	    if (f0[i] != 0 && f0[i + 1] != 0)
+	    {
+	      //Para los errores de frecuencia múltiple o mitad
+	      if (f0[i] >= 2 * f0[i + 1] || 2 * f0[i] <= f0[i + 1])
+	      {
+		//Añadimos elementos a la ventana
+		for (int j = 0; j < lon_ventana; j++)
+		{
+		  ventana.insert(ventana.begin() + j, f0[i + j]);
+		}
+		//Ordenamos elementos
+		sort(ventana.begin(), ventana.end());
+		//Cogemos la mediana de la ventana y le asignamos ese valor a la frecuencia multiple o mitad
+		f0[i] = ventana[(lon_ventana - 1) / 2];
+		ventana.clear();
+	      }
+	    }
+	    else if (f0[i] != 0 && f0[i + 1] == 0)
+	    {
+	      //caso confusión detecta sonoro y es sordo
+	      if (f0[i - 1] == 0)
+	      {
+		f0[i] = 0;
+	      }
+	      //caso especifico frecuencia doble o mitad justo cuando pasa de sonoro a sordo
+	      else
+	      {
+		if (f0[i] >= 2 * f0[i - 1] || 2 * f0[i] <= f0[i - 1])
+		{
+		  f0[i] = f0[i - 1];
+		}
+	      }
+	    }
+	    //caso confusion detecta sordo y es sonoro
+	    else if (f0[i] == 0 && f0[i + 1] != 0 && f0[i - 1] != 0)
+	    {
+	      f0[i] = (f0[i + 1] + f0[i - 1]) / 2;
+	    }
+	  }
+	#endif
   ```
   El tamaño de la ventana que creamos debe ser el mínimo para permitir arreglar los errores de frecuencia múltiple o mitad ya que si no puede ser perjudicial y cambiar frecuencias fundamentales que ya estaban bien. Por eso mismo hemos escogido la ventana de tamaño 3 para que hayan dos valores correctos y uno incorrecto y mediante ordenación se pueda coger la mediana de esa ventana y asignarla al valor incorrecto. A continuación vamos a ver un par de errores en una señal sin median filter y como se solucionan al aplicarlo.
 
